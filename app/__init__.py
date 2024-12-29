@@ -38,7 +38,6 @@ def create_app(config_class=Config):
     import os
     if not os.path.exists(app.config['UPLOAD_FOLDER']):
         os.makedirs(app.config['UPLOAD_FOLDER'])
-
     return app
 
 from app import models
