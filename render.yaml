@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: wardrobe-app
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn -c gunicorn_config.py run:app
+    envVars:
+      - key: FLASK_APP
+        value: run.py
+      - key: FLASK_ENV
+        value: production
+      - key: SECRET_KEY
+        generateValue: true
+    healthCheckPath: /
