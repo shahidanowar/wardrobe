@@ -3,7 +3,9 @@ services:
     name: wardrobe-app
     env: python
     buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn -c gunicorn_config.py run:app
+    startCommand: |
+      python init_db.py
+      gunicorn -c gunicorn_config.py run:app
     envVars:
       - key: FLASK_APP
         value: run.py
