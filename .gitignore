@@ -1,0 +1,8 @@
+*.pyc
+__pycache__/
+instance/
+.env
+.flaskenv
+*.db
+venv/
+.venv/

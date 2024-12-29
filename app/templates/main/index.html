@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="jumbotron text-center">
+    <h1 class="display-4">Welcome to Digital Wardrobe</h1>
+    <p class="lead">Organize your clothes and get AI-powered outfit recommendations</p>
+    {% if current_user.is_authenticated %}
+        <hr class="my-4">
+        <p>Start managing your wardrobe today!</p>
+        <a class="btn btn-primary btn-lg" href="{{ url_for('wardrobe.upload_item') }}" role="button">Upload Item</a>
+        <a class="btn btn-secondary btn-lg" href="{{ url_for('wardrobe.view_items') }}" role="button">View Wardrobe</a>
+    {% else %}
+        <hr class="my-4">
+        <p>Join us to start organizing your wardrobe!</p>
+        <a class="btn btn-primary btn-lg" href="{{ url_for('auth.register') }}" role="button">Register Now</a>
+        <a class="btn btn-secondary btn-lg" href="{{ url_for('auth.login') }}" role="button">Login</a>
+    {% endif %}
+</div>
+
+{% if current_user.is_authenticated and items %}
+<div class="row mt-5">
+    <div class="col-12">
+        <h2>Recent Items</h2>
+        <div class="row">
+            {% for item in items[:4] %}
+            <div class="col-md-3 mb-4">
+                <div class="card">
+                    <img src="{{ url_for('static', filename='uploads/' + item.image_path) }}" class="card-img-top" alt="{{ item.name }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ item.name }}</h5>
+                        <p class="card-text">{{ item.category }}</p>
+                        <a href="{{ url_for('wardrobe.item_detail', id=item.id) }}" class="btn btn-primary">View Details</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

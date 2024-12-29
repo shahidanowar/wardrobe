@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Welcome, {{ current_user.username }}!</h5>
+                    <p class="card-text">
+                        <small class="text-muted">Member since {{ current_user.created_at.strftime('%B %Y') }}</small>
+                    </p>
+                    <a href="{{ url_for('main.profile') }}" class="btn btn-outline-primary">View Profile</a>
+                </div>
+            </div>
+            
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">Quick Stats</h5>
+                    <ul class="list-unstyled">
+                        <li>Items in Wardrobe: {{ current_user.wardrobe_items.count() }}</li>
+                        <li>Outfits Created: {{ current_user.outfits.count() }}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Recent Items</h5>
+                </div>
+                <div class="card-body">
+                    {% if recent_items %}
+                    <div class="row row-cols-1 row-cols-md-3 g-4">
+                        {% for item in recent_items %}
+                        <div class="col">
+                            <div class="card h-100">
+                                <img src="{{ url_for('static', filename='uploads/' + item.image_path) }}" 
+                                     class="card-img-top" alt="{{ item.name }}"
+                                     style="height: 120px; object-fit: cover;">
+                                <div class="card-body">
+                                    <h6 class="card-title">{{ item.name }}</h6>
+                                    <span class="badge bg-primary">{{ item.category }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <p class="text-muted">No items in your wardrobe yet.</p>
+                    <a href="{{ url_for('wardrobe.upload_item') }}" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Add Your First Item
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Recent Outfits</h5>
+                </div>
+                <div class="card-body">
+                    {% if recent_outfits %}
+                    <div class="list-group">
+                        {% for outfit in recent_outfits %}
+                        <a href="{{ url_for('wardrobe.view_outfit', id=outfit.id) }}" class="list-group-item list-group-item-action">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h6 class="mb-1">{{ outfit.name }}</h6>
+                                <small class="text-muted">{{ outfit.created_at.strftime('%Y-%m-%d') }}</small>
+                            </div>
+                            <small class="text-muted">{{ outfit.occasion }}</small>
+                        </a>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <p class="text-muted">No outfits created yet.</p>
+                    <button class="btn btn-primary" disabled 
+                            data-bs-toggle="tooltip" data-bs-placement="top" 
+                            title="AI outfit recommendations are coming soon!">
+                        <i class="fas fa-plus"></i> Get Outfit Recommendation
+                        <small class="d-block">(Coming Soon)</small>
+                    </button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
